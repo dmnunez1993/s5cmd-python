@@ -94,7 +94,7 @@ class S5CmdRunner:
             
 
         if self.no_sign_request:
-            args.insert(0, "--no-sign-request")
+            args = ("--no-sign-request") + args
 
         if capture_output:
             try:
