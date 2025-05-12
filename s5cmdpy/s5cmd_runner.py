@@ -36,10 +36,11 @@ class S5CmdRunner:
         run(txt_uri): Runs s5cmd with a command file specified by a local path, URL, or S3 URI.
     """
 
-    def __init__(self):
+    def __init__(self, no_sign_request: bool = False):
         # if on windows
         binary_name = 's5cmd' if os.name != 'nt' else 's5cmd.exe'
         self.s5cmd_path = os.path.expanduser(f'~/{binary_name}')
+        self.no_sign_request = no_sign_request
 
         self.logger = UniLogger()
         if not self.has_s5cmd():
@@ -90,6 +91,10 @@ class S5CmdRunner:
             if not self.has_s5cmd():
                 self.logger.error("Failed to ensure s5cmd is available.")
                 raise RuntimeError("Failed to ensure s5cmd is available.")
+            
+
+        if self.no_sign_request:
+            args.insert(0, "--no-sign-request")
 
         if capture_output:
             try:
